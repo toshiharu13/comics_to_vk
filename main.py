@@ -3,6 +3,7 @@ from pathlib import Path
 import requests
 from urllib.parse import urlparse
 import os
+from environs import Env
 
 
 def get_comics(url):
@@ -33,6 +34,9 @@ def get_filename_from_url(url):
 
 
 if __name__ == '__main__':
+    env = Env()
+    env.read_env()
+
     logging.basicConfig(
         level=logging.DEBUG,
         filename='log.lod',
@@ -41,5 +45,7 @@ if __name__ == '__main__':
     current_comics_json_url = 'https://xkcd.com/info.0.json'
     comics_folder = Path.cwd()/'comics'
     Path(comics_folder).mkdir(parents=True, exist_ok=True)
-    print(get_comics(current_comics_json_url))
+    vk_app_id = env.str('VK_APP_ID')
+
+
 
