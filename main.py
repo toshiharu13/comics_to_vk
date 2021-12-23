@@ -41,6 +41,23 @@ def get_filename_from_url(url):
     return file_name
 
 
+def get_wall_upload_server(url, params, method):
+    full_url = f'{url}/{method}'
+    response = requests.get(full_url, params=params)
+    response.raise_for_status()
+    logging.info(response.json())
+    return response.json()['response']['upload_url']
+
+
+def save_wall_photo(url, params, method):
+    full_url = f'{url}/{method}'
+    response = requests.get(full_url, params=params)
+    response.raise_for_status()
+    logging.info(response.json())
+    return response.json()
+
+
+
 if __name__ == '__main__':
     env = Env()
     env.read_env()
@@ -57,10 +74,20 @@ if __name__ == '__main__':
     vk_api_uri = 'https://api.vk.com/method'
     vk_url_params = {
         'access_token': env.str('VK_TOKEN'),
-        'user_id': 562778,
-        'v': '5.131'
+        'group_id': 207675974,
+        'v': '5.131'}
+    vk_save_pict_params = {
+        'access_token': env.str('VK_TOKEN'),
+        'group_id': 207675974,
+        'v': '5.131',
+        'photo': f'{comics_folder}/immunity.png',
     }
-    method = 'groups.get'
-    print(get_vk_request(vk_api_uri, vk_url_params, method))
+    method_get_server = 'photos.getWallUploadServer'
+    method_save_image = 'photos.saveWallPhoto'
+
+    uri_download_server = get_wall_upload_server(vk_api_uri, vk_url_params, method_get_server)
+    #print(uri_download_server)
+    print(save_wall_photo(uri_download_server, vk_save_pict_params, method_save_image))
+
 
 
