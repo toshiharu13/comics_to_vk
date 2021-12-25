@@ -49,13 +49,13 @@ def get_wall_upload_server(url, params, method):
     return response.json()['response']['upload_url']
 
 
-'''def download_image(url, image):
+def download_image(url, image):
     with open(image, 'rb') as file:
         files = {
-            'media': file,}
+            'photo': file}
         response = requests.post(url, files=files)
         response.raise_for_status()
-        return response.json()'''
+        return response.json()
 
 
 def save_wall_photo(url, params, method):
@@ -84,14 +84,15 @@ if __name__ == '__main__':
         'access_token': env.str('VK_TOKEN'),
         'group_id': 207675974,
         'v': '5.131'}
-    photo = f'{comics_folder}/immunity.png'
+    photo = f'{comics_folder}/december_25th_launch.png'
     method_get_server = 'photos.getWallUploadServer'
     method_save_image = 'photos.saveWallPhoto'
 
+    #get_comics(current_comics_json_url)
     uri_download_server = get_wall_upload_server(vk_api_uri, vk_url_params, method_get_server)
     logging.info(uri_download_server)
-    print(uri_download_server)
-    #print(download_image(uri_download_server, photo))
+    #print(uri_download_server)
+    print(download_image(uri_download_server, photo))
     #print(save_wall_photo(uri_download_server, vk_url_params, method_save_image))
 
 
