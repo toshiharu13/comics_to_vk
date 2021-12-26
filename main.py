@@ -58,7 +58,8 @@ def download_image(url, image):
         return response.json()
 
 
-def save_wall_photo(url, params, method):
+def save_wall_photo(url, params, method, download_data):
+    params['server'], params['photo'], params['hash'] = download_data['server'], download_data['photo'], download_data['hash']
     full_url = f'{url}/{method}'
     response = requests.post(full_url, params=params)
     response.raise_for_status()
@@ -92,7 +93,8 @@ if __name__ == '__main__':
     uri_download_server = get_wall_upload_server(vk_api_uri, vk_url_params, method_get_server)
     logging.info(uri_download_server)
     #print(uri_download_server)
-    print(download_image(uri_download_server, photo))
-    #print(save_wall_photo(uri_download_server, vk_url_params, method_save_image))
+    donload_data = download_image(uri_download_server, photo)
+    response_save_wall = save_wall_photo(vk_api_uri, vk_url_params, method_save_image, donload_data)
+    print(response_save_wall)
 
 
