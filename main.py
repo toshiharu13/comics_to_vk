@@ -5,6 +5,7 @@ from urllib.parse import urlparse
 import os
 from environs import Env
 import copy
+import random
 
 
 def get_vk_request(url, params, method):
@@ -24,8 +25,17 @@ def get_comics(url):
     file_name = get_filename_from_url(comics_url)
     copy_destination = Path.cwd()/'comics'/file_name
     download_comics(copy_destination, comics_url)
-    logging.info(f'download {comics_url}')
+    logging.info(f'download to {comics_url}')
     return commics_comment, copy_destination
+
+
+def get_random_comics_link(url):
+    response = requests.get(url)
+    response.raise_for_status()
+    logging.info(response.json())
+    last_comics_number = response.json()['num']
+    int_random = random.randint(0, last_comics_number)
+    return f'https://xkcd.com/{int_random}/info.0.json'
 
 
 def download_comics(destination, url):
@@ -115,7 +125,8 @@ if __name__ == '__main__':
     method_get_server = 'photos.getWallUploadServer'
     method_save_image = 'photos.saveWallPhoto'
 
-    comics_message_and_image = get_comics(current_comics_json_url)
+    randon_comics_link = get_random_comics_link(current_comics_json_url)
+    comics_message_and_image = get_comics(randon_comics_link)
     #comics_message_and_image = ('test1', '/home/boyko-ab/Документы/учеба/comics_to_vk/comics/immunity.png')
     uri_download_server = get_wall_upload_server(vk_api_uri, vk_url_params, method_get_server)
     logging.info(uri_download_server)
@@ -124,5 +135,4 @@ if __name__ == '__main__':
     logging.info(response_save_wall)
     response_create_post = create_wall_post(vk_api_uri, vk_url_params, comics_message_and_image[0], response_save_wall)
     print(response_create_post)
-
 
