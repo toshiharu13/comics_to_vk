@@ -1,4 +1,5 @@
 import logging
+import shutil
 from pathlib import Path
 import requests
 from urllib.parse import urlparse
@@ -104,6 +105,18 @@ def create_wall_post(url, params, comics_message, response_save_wall):
     return response.json()
 
 
+def clear_image_folder(folder):
+    """
+    Функия очистки папки с изображениями
+    :param folder: папка которую надо чистить(для гибгости)
+    :return: None
+    """
+    try:
+        shutil.rmtree(folder)
+    except Exception as e:
+        logging.info('Failed to delete %s. Reason: %s' % (folder, e))
+
+
 if __name__ == '__main__':
     env = Env()
     env.read_env()
@@ -134,5 +147,6 @@ if __name__ == '__main__':
     response_save_wall = save_wall_photo(vk_api_uri, vk_url_params, method_save_image, donload_data)
     logging.info(response_save_wall)
     response_create_post = create_wall_post(vk_api_uri, vk_url_params, comics_message_and_image[0], response_save_wall)
-    print(response_create_post)
+    logging.info(response_create_post)
+    clear_image_folder(comics_folder)
 
