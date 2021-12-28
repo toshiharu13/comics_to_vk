@@ -74,10 +74,11 @@ def download_image(url, image):
         return response.json()
 
 
-def save_wall_photo(url, params, method, download_data):
+def save_wall_photo(url, params, download_data):
     """
     Функция сохранения изображенияв альбом группы(с download сервера)
     """
+    method = 'photos.saveWallPhoto'
     params_local = copy.copy(params)
     params_local['server'], params_local['photo'], params_local['hash'] = download_data['server'], download_data['photo'], download_data['hash']
     full_url = f'{url}/{method}'
@@ -90,6 +91,11 @@ def save_wall_photo(url, params, method, download_data):
 def create_wall_post(url, params, comics_message, response_save_wall):
     """
     Функция поста сообщения с изображением на стену
+    :param url: адрес API VK
+    :param params: стандартные параметры, корректируются под каждую функцию
+    :param comics_message: сообщение будущего поста
+    :param response_save_wall: данные для параметров данного матода
+    :return: номер поста в группе
     """
     full_url = f'{url}/wall.post'
     params_local = copy.copy(params)
@@ -98,9 +104,9 @@ def create_wall_post(url, params, comics_message, response_save_wall):
     group_id = params['group_id']
     params_local['owner_id'] = f'-{group_id}'
     media_owner_id = response_save_wall['response'][0]['owner_id']
-    comics_vk_in_uri = response_save_wall['response'][0]['id']
-    atach_variable = f'photo{media_owner_id}_{comics_vk_in_uri}'
-    params_local['attachments'] = atach_variable
+    vk_comics_url_id = response_save_wall['response'][0]['id']
+    attach_variable = f'photo{media_owner_id}_{vk_comics_url_id}'
+    params_local['attachments'] = attach_variable
     response = requests.get(full_url, params=params_local)
     response.raise_for_status()
     return response.json()
@@ -136,15 +142,13 @@ if __name__ == '__main__':
         'access_token': env.str('VK_TOKEN'),
         'group_id': 207675974,
         'v': '5.131'}
-    method_save_image = 'photos.saveWallPhoto'
 
     randon_comics_link = get_random_comics_link(current_comics_json_url)
     comics_message_and_image = get_comics(randon_comics_link)
-    #comics_message_and_image = ('test1', '/home/boyko-ab/Документы/учеба/comics_to_vk/comics/immunity.png')
     uri_download_server = get_wall_upload_server(vk_api_uri, vk_url_params)
     logging.info(uri_download_server)
     donload_data = download_image(uri_download_server, comics_message_and_image[1])
-    response_save_wall = save_wall_photo(vk_api_uri, vk_url_params, method_save_image, donload_data)
+    response_save_wall = save_wall_photo(vk_api_uri, vk_url_params, donload_data)
     logging.info(response_save_wall)
     response_create_post = create_wall_post(vk_api_uri, vk_url_params, comics_message_and_image[0], response_save_wall)
     logging.info(response_create_post)
