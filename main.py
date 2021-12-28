@@ -62,9 +62,12 @@ def get_wall_upload_server(url, params):
     return response.json()['response']['upload_url']
 
 
-def download_image(url, image):
+def upload_comics(url, image):
     """
     функция загрузки изображения на сервер VK
+    :param url: адрес API VK
+    :param image: локальная ссылка на загружаемый комикс
+    :return: данные для дальней обработки изображения(комикса)
     """
     with open(image, 'rb') as file:
         files = {
@@ -155,7 +158,7 @@ if __name__ == '__main__':
     comics_message_and_image = get_comics(randon_comics_link)
     uri_download_server = get_wall_upload_server(vk_api_uri, vk_url_params)
     logging.info(uri_download_server)
-    donload_data = download_image(uri_download_server, comics_message_and_image[1])
+    donload_data = upload_comics(uri_download_server, comics_message_and_image[1])
     response_save_wall = save_wall_photo(vk_api_uri, vk_url_params, donload_data)
     logging.info(response_save_wall)
     response_create_post = create_wall_post(vk_api_uri, vk_url_params, comics_message_and_image[0], response_save_wall)
