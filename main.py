@@ -1,12 +1,13 @@
+import copy
 import logging
+import os
+import random
 import shutil
 from pathlib import Path
-import requests
 from urllib.parse import urlparse
-import os
+
+import requests
 from environs import Env
-import copy
-import random
 
 
 def get_comics(url):
