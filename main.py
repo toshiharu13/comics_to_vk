@@ -54,6 +54,12 @@ def get_filename_from_url(url):
 
 
 def get_wall_upload_server(url, params):
+    """
+    Функция получения адреса сервера загрузки для комикса
+    :param url: адрес API VK
+    :param params: стандартные параметры, корректируются под каждую функцию
+    :return: адрес сервера для загрузки комикса
+    """
     method = 'photos.getWallUploadServer'
     full_url = f'{url}/{method}'
     response = requests.get(full_url, params=params)
