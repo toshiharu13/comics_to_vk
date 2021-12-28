@@ -53,7 +53,8 @@ def get_filename_from_url(url):
     return file_name
 
 
-def get_wall_upload_server(url, params, method):
+def get_wall_upload_server(url, params):
+    method = 'photos.getWallUploadServer'
     full_url = f'{url}/{method}'
     response = requests.get(full_url, params=params)
     response.raise_for_status()
@@ -135,13 +136,12 @@ if __name__ == '__main__':
         'access_token': env.str('VK_TOKEN'),
         'group_id': 207675974,
         'v': '5.131'}
-    method_get_server = 'photos.getWallUploadServer'
     method_save_image = 'photos.saveWallPhoto'
 
     randon_comics_link = get_random_comics_link(current_comics_json_url)
     comics_message_and_image = get_comics(randon_comics_link)
     #comics_message_and_image = ('test1', '/home/boyko-ab/Документы/учеба/comics_to_vk/comics/immunity.png')
-    uri_download_server = get_wall_upload_server(vk_api_uri, vk_url_params, method_get_server)
+    uri_download_server = get_wall_upload_server(vk_api_uri, vk_url_params)
     logging.info(uri_download_server)
     donload_data = download_image(uri_download_server, comics_message_and_image[1])
     response_save_wall = save_wall_photo(vk_api_uri, vk_url_params, method_save_image, donload_data)
