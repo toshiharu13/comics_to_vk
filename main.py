@@ -155,19 +155,17 @@ def clear_image_folder(folder):
         logging.info('Failed to delete %s. Reason: %s' % (folder, e))
 
 
-if __name__ == '__main__':
+def main():
     env = Env()
     env.read_env()
 
     logging.basicConfig(
         level=logging.DEBUG,
         filename='log.lod',
-        filemode='w',
-    )
+        filemode='w',)
     current_comics_json_url = 'https://xkcd.com/info.0.json'
-    comics_folder = Path.cwd()/'comics'
+    comics_folder = Path.cwd() / 'comics'
     Path(comics_folder).mkdir(parents=True, exist_ok=True)
-    vk_app_id = env.str('VK_APP_ID')
     vk_api_uri = 'https://api.vk.com/method'
     vk_url_params = {
         'access_token': env.str('VK_TOKEN'),
@@ -178,10 +176,17 @@ if __name__ == '__main__':
     comics_message_and_image = get_comics(randon_comics_link)
     uri_download_server = get_wall_upload_server(vk_api_uri, vk_url_params)
     logging.info(uri_download_server)
-    donload_data = upload_comics(uri_download_server, comics_message_and_image[1])
-    response_save_wall = save_wall_photo(vk_api_uri, vk_url_params, donload_data)
+    donload_data = upload_comics(uri_download_server,
+                                 comics_message_and_image[1])
+    response_save_wall = save_wall_photo(vk_api_uri, vk_url_params,
+                                         donload_data)
     logging.info(response_save_wall)
-    response_create_post = create_wall_post(vk_api_uri, vk_url_params, comics_message_and_image[0], response_save_wall)
+    response_create_post = create_wall_post(vk_api_uri, vk_url_params,
+                                            comics_message_and_image[0],
+                                            response_save_wall)
     logging.info(response_create_post)
     clear_image_folder(comics_folder)
 
+
+if __name__ == '__main__':
+    main()

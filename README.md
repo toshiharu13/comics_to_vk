@@ -17,8 +17,11 @@
 
 - Создать файл .env и заполнить в нем переменные:
 
-   - ```VK_APP_ID=<ID вашей группы, в которой вы будете выкладывать комиксы>```
-   - ```VK_TOKEN=<токен для доступа к VK API>```
+ ```VK_TOKEN=<токен для доступа к VK API>```
+
+ - Для получения токена, необходимо завести адрес в браузере
+
+```https://oauth.vk.com/authorize?client_id=<ID вашего приложения>&display=page&scope=photos,groups,wall,offline&response_type=token&v=5.131```
 
 ## Запуск
 
