@@ -77,10 +77,18 @@ def download_image(url, image):
 def save_wall_photo(url, params, download_data):
     """
     Функция сохранения изображенияв альбом группы(с download сервера)
+    :param url: адрес API VK
+    :param params: стандартные параметры, корректируются под каждую функцию
+    :param download_data: данные загрузки комикса на сервер
+    :return: данные загрузки в альбом, необходимы для дальнейшего поста
     """
     method = 'photos.saveWallPhoto'
     params_local = copy.copy(params)
-    params_local['server'], params_local['photo'], params_local['hash'] = download_data['server'], download_data['photo'], download_data['hash']
+    (params_local['server'],
+     params_local['photo'],
+     params_local['hash']) = (download_data['server'],
+                              download_data['photo'],
+                              download_data['hash'])
     full_url = f'{url}/{method}'
     response = requests.post(full_url, params=params_local)
     response.raise_for_status()
