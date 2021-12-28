@@ -9,15 +9,12 @@ import copy
 import random
 
 
-def get_vk_request(url, params, method):
-    full_uri = f'{url}/{method}'
-    response = requests.get(full_uri, params=params)
-    response.raise_for_status()
-    logging.info(response.text)
-    return response.json()
-
-
 def get_comics(url):
+    """
+    Функция скачивания комикса
+    :param url: ссылка на комикс
+    :return: комментарий к комиксу, путь до скаченного файла
+    """
     response = requests.get(url)
     response.raise_for_status()
     logging.info(response.json())
@@ -31,6 +28,11 @@ def get_comics(url):
 
 
 def get_random_comics_link(url):
+    """
+    Функция получения ссылки на рандомный файл комикса
+    :param url: ссылка на последний комикс
+    :return: ссылка на рандомный комикс
+    """
     response = requests.get(url)
     response.raise_for_status()
     logging.info(response.json())
@@ -40,6 +42,12 @@ def get_random_comics_link(url):
 
 
 def download_comics(destination, url):
+    """
+    Функция скачивания файла комикса на жесткий диск
+    :param destination: полный путь сохранения с именем файла
+    :param url: источник скачивания
+    :return: None
+    """
     response = requests.get(url)
     response.raise_for_status()
     with open(destination, 'wb') as file:
@@ -47,6 +55,11 @@ def download_comics(destination, url):
 
 
 def get_filename_from_url(url):
+    """
+    Функция получения имени файла из ссылки
+    :param url: ссылка на скачиваемый файл
+    :return: имя файла
+    """
     parse_url = urlparse(url)
     path_to_file = parse_url.path
     file_name = os.path.split(path_to_file)[1]
