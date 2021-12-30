@@ -169,7 +169,7 @@ def main():
     vk_api_uri = 'https://api.vk.com/method'
     vk_url_params = {
         'access_token': env.str('VK_TOKEN'),
-        'group_id': 207675974,
+        'group_id': env.str('VK_GROUP_ID'),
         'v': '5.131'}
 
     randon_comics_link = get_random_comics_link(current_comics_json_url)
