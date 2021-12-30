@@ -1,10 +1,10 @@
 # Постим через VK API комиксы
-Программа для публикации комиксов из [xkcd.com](https://xkcd.com) в [vk.com](https://vk.com) группе
+Программа для публикации комиксов из [xkcd.com](https://xkcd.com) в [vk.com](https://vk.com) группе.
 
 [![Python](https://img.shields.io/badge/-Python-464646?style=flat-square&logo=Python)](https://www.python.org/)
 
 ## Техническое описание
-Данная программа при запуске публикиет рандомный комикс из коллекции сайта  [xkcd.com](https://xkcd.com), и выкладывает его на стене группы в [vk.com](https://vk.com)
+Данная программа при запуске публикиет рандомный комикс из коллекции сайта  [xkcd.com](https://xkcd.com), и выкладывает его на стене группы в [vk.com](https://vk.com).
 
 ## Как установить
 - Cклонировать проект
