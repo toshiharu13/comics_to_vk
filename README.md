@@ -22,8 +22,11 @@
 
  - Для получения токена, необходимо завести адрес в браузере
 
-```https://oauth.vk.com/authorize?client_id=<ID вашего приложения>&display=page&scope=photos,groups,wall,offline&response_type=token&v=5.131```
+```https://oauth.vk.com/authorize?client_id=<ID вашего VK приложения>&display=page&scope=photos,groups,wall,offline&response_type=token&v=5.131```
 
+[создание и управление VK приложениями](https://vk.com/apps?act=manage)
+
+[подробнее о получении токена VK](https://vk.com/dev/implicit_flow_user)
 ## Запуск
 
 ```python3 main.py```
