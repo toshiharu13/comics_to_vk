@@ -190,10 +190,10 @@ def main():
                                                 comics_message_and_image[0],
                                                 response_save_wall)
         logging.info(response_create_post)
+    except Exception as error:
+        print(f'Programm failed: {error}.')
+    finally:
         clear_image_folder(comics_folder)
-    except Exception as e:
-        clear_image_folder(comics_folder)
-        print(f'Programm failed: {e}.')
 
 
 if __name__ == '__main__':
