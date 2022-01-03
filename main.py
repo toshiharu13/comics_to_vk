@@ -18,9 +18,10 @@ def get_comics(url):
     """
     response = requests.get(url)
     response.raise_for_status()
-    logging.info(response.json())
-    comics_url = response.json()['img']
-    commics_comment = response.json()['alt']
+    response_json = response.json()
+    logging.info(response_json)
+    comics_url = response_json['img']
+    commics_comment = response_json['alt']
     file_name = get_filename_from_url(comics_url)
     copy_destination = Path.cwd()/'comics'/file_name
     download_comics(copy_destination, comics_url)
@@ -36,8 +37,9 @@ def get_random_comics_link(url):
     """
     response = requests.get(url)
     response.raise_for_status()
-    logging.info(response.json())
-    last_comics_number = response.json()['num']
+    response_json = response.json()
+    logging.info(response_json)
+    last_comics_number = response_json['num']
     int_random = random.randint(0, last_comics_number)
     return f'https://xkcd.com/{int_random}/info.0.json'
 
@@ -78,8 +80,9 @@ def get_wall_upload_server(url, params):
     full_url = f'{url}/{method}'
     response = requests.get(full_url, params=params)
     response.raise_for_status()
-    logging.info(response.json())
-    return response.json()['response']['upload_url']
+    response_json = response.json()
+    logging.info(response_json)
+    return response_json['response']['upload_url']
 
 
 def upload_comics(url, image):
@@ -115,8 +118,9 @@ def save_wall_photo(url, params, download_data):
     full_url = f'{url}/{method}'
     response = requests.post(full_url, params=params_local)
     response.raise_for_status()
-    logging.info(response.json())
-    return response.json()
+    response_json = response.json()
+    logging.info(response_json)
+    return response_json
 
 
 def create_wall_post(url, params, comics_message, response_save_wall):
