@@ -148,18 +148,6 @@ def create_wall_post(url, params, comics_message, response_save_wall):
     return response.json()
 
 
-def clear_image_folder(folder):
-    """
-    Функия очистки папки с изображениями
-    :param folder: папка которую надо чистить(для гибгости)
-    :return: None
-    """
-    try:
-        shutil.rmtree(folder)
-    except Exception as e:
-        logging.info('Failed to delete %s. Reason: %s' % (folder, e))
-
-
 def main():
     try:
         env = Env()
@@ -191,9 +179,9 @@ def main():
                                                 response_save_wall)
         logging.info(response_create_post)
     except Exception as error:
-        print(f'Programm failed: {error}.')
+        logging.info(f'Programm failed: {error}.')
     finally:
-        clear_image_folder(comics_folder)
+        shutil.rmtree(comics_folder, ignore_errors=True)
 
 
 if __name__ == '__main__':
