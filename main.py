@@ -10,12 +10,13 @@ import requests
 from environs import Env
 
 
-def get_comics(url):
+def get_comics(random_comics_number):
     """
     Функция скачивания комикса
-    :param url: ссылка на комикс
+    :param random_comics_number: номер комикса
     :return: комментарий к комиксу, путь до скаченного файла
     """
+    url = f'https://xkcd.com/{random_comics_number}/info.0.json'
     response = requests.get(url)
     response.raise_for_status()
     response_json = response.json()
@@ -29,19 +30,19 @@ def get_comics(url):
     return commics_comment, copy_destination
 
 
-def get_random_comics_link(url):
+def get_random_comics_number():
     """
     Функция получения ссылки на рандомный файл комикса
-    :param url: ссылка на последний комикс
-    :return: ссылка на рандомный комикс
+    :return: случайный номер комикса
     """
+    url = 'https://xkcd.com/info.0.json'
     response = requests.get(url)
     response.raise_for_status()
     response_json = response.json()
     logging.info(response_json)
     last_comics_number = response_json['num']
-    int_random = random.randint(0, last_comics_number)
-    return f'https://xkcd.com/{int_random}/info.0.json'
+    random_comics_number = random.randint(0, last_comics_number)
+    return random_comics_number
 
 
 def download_comics(destination, url):
@@ -160,36 +161,39 @@ def clear_image_folder(folder):
 
 
 def main():
-    env = Env()
-    env.read_env()
+    try:
+        env = Env()
+        env.read_env()
 
-    logging.basicConfig(
-        level=logging.DEBUG,
-        filename='log.lod',
-        filemode='w',)
-    current_comics_json_url = 'https://xkcd.com/info.0.json'
-    comics_folder = Path.cwd() / 'comics'
-    Path(comics_folder).mkdir(parents=True, exist_ok=True)
-    vk_api_uri = 'https://api.vk.com/method'
-    vk_url_params = {
-        'access_token': env.str('VK_TOKEN'),
-        'group_id': env.str('VK_GROUP_ID'),
-        'v': '5.131'}
+        logging.basicConfig(
+            level=logging.DEBUG,
+            filename='log.lod',
+            filemode='w',)
+        comics_folder = Path.cwd() / 'comics'
+        Path(comics_folder).mkdir(parents=True, exist_ok=True)
+        vk_api_uri = 'https://api.vk.com/method'
+        vk_url_params = {
+            'access_token': env.str('VK_TOKEN'),
+            'group_id': env.str('VK_GROUP_ID'),
+            'v': '5.131'}
 
-    randon_comics_link = get_random_comics_link(current_comics_json_url)
-    comics_message_and_image = get_comics(randon_comics_link)
-    uri_download_server = get_wall_upload_server(vk_api_uri, vk_url_params)
-    logging.info(uri_download_server)
-    donload_data = upload_comics(uri_download_server,
-                                 comics_message_and_image[1])
-    response_save_wall = save_wall_photo(vk_api_uri, vk_url_params,
-                                         donload_data)
-    logging.info(response_save_wall)
-    response_create_post = create_wall_post(vk_api_uri, vk_url_params,
-                                            comics_message_and_image[0],
-                                            response_save_wall)
-    logging.info(response_create_post)
-    clear_image_folder(comics_folder)
+        randon_comics_number = get_random_comics_number()
+        comics_message_and_image = get_comics(randon_comics_number)
+        uri_download_server = get_wall_upload_server(vk_api_uri, vk_url_params)
+        logging.info(uri_download_server)
+        donload_data = upload_comics(uri_download_server,
+                                     comics_message_and_image[1])
+        response_save_wall = save_wall_photo(vk_api_uri, vk_url_params,
+                                             donload_data)
+        logging.info(response_save_wall)
+        response_create_post = create_wall_post(vk_api_uri, vk_url_params,
+                                                comics_message_and_image[0],
+                                                response_save_wall)
+        logging.info(response_create_post)
+        clear_image_folder(comics_folder)
+    except Exception as e:
+        clear_image_folder(comics_folder)
+        print(f'Programm failed: {e}.')
 
 
 if __name__ == '__main__':
