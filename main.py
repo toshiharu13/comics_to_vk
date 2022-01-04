@@ -5,6 +5,7 @@ import random
 import shutil
 from pathlib import Path
 from urllib.parse import urlparse
+from urllib.parse import unquote
 
 import requests
 from environs import Env
@@ -67,6 +68,7 @@ def get_filename_from_url(url):
     parse_url = urlparse(url)
     path_to_file = parse_url.path
     file_name = os.path.split(path_to_file)[1]
+    unquote(file_name, encoding='utf-8', errors='replace')
     return file_name
 
 
@@ -175,10 +177,6 @@ def main():
         comics_folder = Path.cwd() / 'comics'
         Path(comics_folder).mkdir(parents=True, exist_ok=True)
         vk_api_uri = 'https://api.vk.com/method'
-        vk_url_params = {
-            'access_token': env.str('VK_TOKEN'),
-            'group_id': env.str('VK_GROUP_ID'),
-            'v': '5.131'}
         access_token = env.str('VK_TOKEN')
         group_id = env.str('VK_GROUP_ID')
 
@@ -187,8 +185,8 @@ def main():
         uri_download_server = get_wall_upload_server(
             vk_api_uri, access_token, group_id)
         logging.info(uri_download_server)
-        download_data = upload_comics(uri_download_server,
-                                     comics_message_and_image[1])
+        download_data = upload_comics(
+            uri_download_server, comics_message_and_image[1])
         response_save_wall = save_wall_photo(
             vk_api_uri,  access_token, group_id, download_data)
         logging.info(response_save_wall)
