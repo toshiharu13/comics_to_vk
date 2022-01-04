@@ -22,12 +22,15 @@ def get_comics(random_comics_number):
     response.raise_for_status()
     response_json = response.json()
     logging.info(response_json)
+
     comics_url = response_json['img']
     commics_comment = response_json['alt']
     file_name = get_filename_from_url(comics_url)
+
     copy_destination = Path.cwd()/'comics'/file_name
     download_comics(copy_destination, comics_url)
     logging.info(f'download to {comics_url}')
+
     return commics_comment, copy_destination
 
 
@@ -41,6 +44,7 @@ def get_random_comics_number():
     response.raise_for_status()
     response_json = response.json()
     logging.info(response_json)
+
     last_comics_number = response_json['num']
     random_comics_number = random.randint(0, last_comics_number)
     return random_comics_number
@@ -86,7 +90,6 @@ def get_wall_upload_server(url, access_token, group_id):
             'access_token': access_token,
             'group_id': group_id,
             'v': '5.131'
-
     }
     response = requests.get(full_url, params=params)
     response.raise_for_status()
@@ -160,6 +163,7 @@ def create_wall_post(
     vk_comics_url_id = response_save_wall['response'][0]['id']
     attach_variable = f'photo{media_owner_id}_{vk_comics_url_id}'
     params['attachments'] = attach_variable
+
     response = requests.get(full_url, params=params)
     response.raise_for_status()
     return response.json()
@@ -185,11 +189,13 @@ def main():
         uri_download_server = get_wall_upload_server(
             vk_api_uri, access_token, group_id)
         logging.info(uri_download_server)
+
         download_data = upload_comics(
             uri_download_server, comics_message_and_image[1])
         response_save_wall = save_wall_photo(
             vk_api_uri,  access_token, group_id, download_data)
         logging.info(response_save_wall)
+
         response_create_post = create_wall_post(
             vk_api_uri, access_token, group_id, comics_message_and_image[0],
             response_save_wall)
