@@ -106,8 +106,8 @@ def upload_comics(url, image):
         files = {
             'photo': file}
         response = requests.post(url, files=files)
-        response.raise_for_status()
-        return response.json()
+    response.raise_for_status()
+    return response.json()
 
 
 def save_wall_photo(url, access_token, group_id, download_data):
