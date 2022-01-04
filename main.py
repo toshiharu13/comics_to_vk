@@ -94,7 +94,10 @@ def get_wall_upload_server(url, access_token, group_id):
     response = requests.get(full_url, params=params)
     response.raise_for_status()
     response_json = response.json()
-    logging.info(response_json)
+    error_check = check_for_error(response_json)
+    if error_check:
+        print('Error occurred, read logs')
+        raise requests.exceptions.HTTPError(error_check)
     return response_json['response']['upload_url']
 
 
@@ -110,7 +113,12 @@ def upload_comics(url, image):
             'photo': file}
         response = requests.post(url, files=files)
     response.raise_for_status()
-    return response.json()
+    response_json = response.json()
+    error_check = check_for_error(response_json)
+    if error_check:
+        print('Error occurred, read logs')
+        raise requests.exceptions.HTTPError(error_check)
+    return response_json
 
 
 def save_wall_photo(url, access_token, group_id, download_data):
@@ -135,6 +143,10 @@ def save_wall_photo(url, access_token, group_id, download_data):
     response = requests.post(full_url, params=params)
     response.raise_for_status()
     response_json = response.json()
+    error_check = check_for_error(response_json)
+    if error_check:
+        print('Error occurred, read logs')
+        raise requests.exceptions.HTTPError(error_check)
     logging.info(response_json)
     return response_json
 
@@ -166,7 +178,22 @@ def create_wall_post(
 
     response = requests.get(full_url, params=params)
     response.raise_for_status()
-    return response.json()
+    response_json = response.json()
+    error_check = check_for_error(response_json)
+    if error_check:
+        print('Error occurred, read logs')
+        raise requests.exceptions.HTTPError(error_check)
+    return response_json
+
+
+def check_for_error(response):
+    """
+    Функция проверки ответа VK на ошибки
+    :param response: ответ VK сервера
+    :return: текст ошибки, если будет обнаружена ошибка
+    """
+    if 'error' in response:
+        return response['error']
 
 
 def main():
