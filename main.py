@@ -197,20 +197,19 @@ def check_for_error(response):
 
 
 def main():
+    env = Env()
+    env.read_env()
+
+    logging.basicConfig(
+        level=logging.DEBUG,
+        filename='log.lod',
+        filemode='w',)
+    comics_folder = Path.cwd() / 'comics'
+    Path(comics_folder).mkdir(parents=True, exist_ok=True)
+    vk_api_uri = 'https://api.vk.com/method'
+    access_token = env.str('VK_TOKEN')
+    group_id = env.str('VK_GROUP_ID')
     try:
-        env = Env()
-        env.read_env()
-
-        logging.basicConfig(
-            level=logging.DEBUG,
-            filename='log.lod',
-            filemode='w',)
-        comics_folder = Path.cwd() / 'comics'
-        Path(comics_folder).mkdir(parents=True, exist_ok=True)
-        vk_api_uri = 'https://api.vk.com/method'
-        access_token = env.str('VK_TOKEN')
-        group_id = env.str('VK_GROUP_ID')
-
         comics_number = get_random_comics_number()
         comics_message_and_image = get_comics(comics_number)
         uri_upload_server = get_wall_upload_server(
