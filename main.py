@@ -69,8 +69,8 @@ def get_filename_from_url(url):
     :param url: ссылка на скачиваемый файл
     :return: имя файла
     """
-    parse_url = urlparse(url)
-    path_to_file = parse_url.path
+    parsed_url = urlparse(url)
+    path_to_file = parsed_url.path
     file_name = os.path.split(path_to_file)[1]
     unquote(file_name, encoding='utf-8', errors='replace')
     return file_name
