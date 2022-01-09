@@ -94,10 +94,7 @@ def get_wall_upload_server(url, access_token, group_id):
     response = requests.get(full_url, params=params)
     response.raise_for_status()
     decode_response = response.json()
-    error_check = check_for_error(decode_response)
-    if error_check:
-        print('Error occurred, read logs')
-        raise requests.exceptions.HTTPError(error_check)
+    check_for_error(decode_response)
     return decode_response['response']['upload_url']
 
 
@@ -114,10 +111,7 @@ def upload_comics(url, image):
         response = requests.post(url, files=files)
     response.raise_for_status()
     decode_response = response.json()
-    error_check = check_for_error(decode_response)
-    if error_check:
-        print('Error occurred, read logs')
-        raise requests.exceptions.HTTPError(error_check)
+    check_for_error(decode_response)
     return decode_response
 
 
@@ -143,10 +137,7 @@ def save_wall_photo(url, access_token, group_id, download_data):
     response = requests.post(full_url, params=params)
     response.raise_for_status()
     decode_response = response.json()
-    error_check = check_for_error(decode_response)
-    if error_check:
-        print('Error occurred, read logs')
-        raise requests.exceptions.HTTPError(error_check)
+    check_for_error(decode_response)
     logging.info(decode_response)
     return decode_response
 
@@ -179,10 +170,7 @@ def create_wall_post(
     response = requests.get(full_url, params=params)
     response.raise_for_status()
     decode_response = response.json()
-    error_check = check_for_error(decode_response)
-    if error_check:
-        print('Error occurred, read logs')
-        raise requests.exceptions.HTTPError(error_check)
+    check_for_error(decode_response)
     return decode_response
 
 
@@ -193,7 +181,7 @@ def check_for_error(response):
     :return: текст ошибки, если будет обнаружена ошибка
     """
     if 'error' in response:
-        return response['error']
+        raise requests.exceptions.HTTPError(response['error'])
 
 
 def main():
