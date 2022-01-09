@@ -20,11 +20,11 @@ def get_comics(random_comics_number):
     url = f'https://xkcd.com/{random_comics_number}/info.0.json'
     response = requests.get(url)
     response.raise_for_status()
-    response_json = response.json()
-    logging.info(response_json)
+    decode_response = response.json()
+    logging.info(decode_response)
 
-    comics_url = response_json['img']
-    commics_comment = response_json['alt']
+    comics_url = decode_response['img']
+    commics_comment = decode_response['alt']
     file_name = get_filename_from_url(comics_url)
 
     comics_file_destination = Path.cwd() / 'comics' / file_name
@@ -42,10 +42,10 @@ def get_random_comics_number():
     url = 'https://xkcd.com/info.0.json'
     response = requests.get(url)
     response.raise_for_status()
-    response_json = response.json()
-    logging.info(response_json)
+    decode_response = response.json()
+    logging.info(decode_response)
 
-    last_comics_number = response_json['num']
+    last_comics_number = decode_response['num']
     random_comics_number = random.randint(0, last_comics_number)
     return random_comics_number
 
@@ -93,12 +93,12 @@ def get_wall_upload_server(url, access_token, group_id):
     }
     response = requests.get(full_url, params=params)
     response.raise_for_status()
-    response_json = response.json()
-    error_check = check_for_error(response_json)
+    decode_response = response.json()
+    error_check = check_for_error(decode_response)
     if error_check:
         print('Error occurred, read logs')
         raise requests.exceptions.HTTPError(error_check)
-    return response_json['response']['upload_url']
+    return decode_response['response']['upload_url']
 
 
 def upload_comics(url, image):
@@ -113,12 +113,12 @@ def upload_comics(url, image):
             'photo': file}
         response = requests.post(url, files=files)
     response.raise_for_status()
-    response_json = response.json()
-    error_check = check_for_error(response_json)
+    decode_response = response.json()
+    error_check = check_for_error(decode_response)
     if error_check:
         print('Error occurred, read logs')
         raise requests.exceptions.HTTPError(error_check)
-    return response_json
+    return decode_response
 
 
 def save_wall_photo(url, access_token, group_id, download_data):
@@ -142,13 +142,13 @@ def save_wall_photo(url, access_token, group_id, download_data):
     full_url = f'{url}/{method}'
     response = requests.post(full_url, params=params)
     response.raise_for_status()
-    response_json = response.json()
-    error_check = check_for_error(response_json)
+    decode_response = response.json()
+    error_check = check_for_error(decode_response)
     if error_check:
         print('Error occurred, read logs')
         raise requests.exceptions.HTTPError(error_check)
-    logging.info(response_json)
-    return response_json
+    logging.info(decode_response)
+    return decode_response
 
 
 def create_wall_post(
@@ -178,12 +178,12 @@ def create_wall_post(
 
     response = requests.get(full_url, params=params)
     response.raise_for_status()
-    response_json = response.json()
-    error_check = check_for_error(response_json)
+    decode_response = response.json()
+    error_check = check_for_error(decode_response)
     if error_check:
         print('Error occurred, read logs')
         raise requests.exceptions.HTTPError(error_check)
-    return response_json
+    return decode_response
 
 
 def check_for_error(response):
