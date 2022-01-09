@@ -211,8 +211,8 @@ def main():
         access_token = env.str('VK_TOKEN')
         group_id = env.str('VK_GROUP_ID')
 
-        randon_comics_number = get_random_comics_number()
-        comics_message_and_image = get_comics(randon_comics_number)
+        comics_number = get_random_comics_number()
+        comics_message_and_image = get_comics(comics_number)
         uri_download_server = get_wall_upload_server(
             vk_api_uri, access_token, group_id)
         logging.info(uri_download_server)
