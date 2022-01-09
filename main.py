@@ -27,11 +27,11 @@ def get_comics(random_comics_number):
     commics_comment = response_json['alt']
     file_name = get_filename_from_url(comics_url)
 
-    copy_destination = Path.cwd()/'comics'/file_name
-    download_comics(copy_destination, comics_url)
+    comics_file_destination = Path.cwd() / 'comics' / file_name
+    download_comics(comics_file_destination, comics_url)
     logging.info(f'download to {comics_url}')
 
-    return commics_comment, copy_destination
+    return commics_comment, comics_file_destination
 
 
 def get_random_comics_number():
@@ -213,14 +213,14 @@ def main():
 
         comics_number = get_random_comics_number()
         comics_message_and_image = get_comics(comics_number)
-        uri_download_server = get_wall_upload_server(
+        uri_upload_server = get_wall_upload_server(
             vk_api_uri, access_token, group_id)
-        logging.info(uri_download_server)
+        logging.info(uri_upload_server)
 
-        download_data = upload_comics(
-            uri_download_server, comics_message_and_image[1])
+        upload_response = upload_comics(
+            uri_upload_server, comics_message_and_image[1])
         response_save_wall = save_wall_photo(
-            vk_api_uri,  access_token, group_id, download_data)
+            vk_api_uri,  access_token, group_id, upload_response)
         logging.info(response_save_wall)
 
         response_create_post = create_wall_post(
