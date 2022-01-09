@@ -11,13 +11,13 @@ import requests
 from environs import Env
 
 
-def get_comics(random_comics_number):
+def get_comics(comics_number, comics_folder):
     """
     Функция скачивания комикса
-    :param random_comics_number: номер комикса
+    :param comics_number: номер комикса
     :return: комментарий к комиксу, путь до скаченного файла
     """
-    url = f'https://xkcd.com/{random_comics_number}/info.0.json'
+    url = f'https://xkcd.com/{comics_number}/info.0.json'
     response = requests.get(url)
     response.raise_for_status()
     decode_response = response.json()
@@ -27,7 +27,7 @@ def get_comics(random_comics_number):
     commics_comment = decode_response['alt']
     file_name = get_filename_from_url(comics_url)
 
-    comics_file_destination = Path.cwd() / 'comics' / file_name
+    comics_file_destination = comics_folder / file_name
     download_comics(comics_file_destination, comics_url)
     logging.info(f'download to {comics_url}')
 
@@ -192,14 +192,14 @@ def main():
         level=logging.DEBUG,
         filename='log.lod',
         filemode='w',)
-    comics_folder = Path.cwd() / 'comics'
+    comics_folder = Path.cwd() / env.str('COMICS_TEMP_FOLDER', default='comics')
     Path(comics_folder).mkdir(parents=True, exist_ok=True)
     vk_api_uri = 'https://api.vk.com/method'
     access_token = env.str('VK_TOKEN')
     group_id = env.str('VK_GROUP_ID')
     try:
         comics_number = get_random_comics_number()
-        comics_message_and_image = get_comics(comics_number)
+        comics_message_and_image = get_comics(comics_number, comics_folder)
         uri_upload_server = get_wall_upload_server(
             vk_api_uri, access_token, group_id)
         logging.info(uri_upload_server)
