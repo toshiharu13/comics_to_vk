@@ -228,7 +228,7 @@ def main():
             comics_owner_id, comics_upload_id)
         logging.info(f'response_create_post {response_create_post}')
     except requests.exceptions.ConnectionError as error:
-        logging.info(f'Programm failed: {error}.')
+        logging.error(f'Programm failed: {error}.')
     finally:
         shutil.rmtree(comics_folder, ignore_errors=True)
 
