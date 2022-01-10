@@ -87,9 +87,9 @@ def get_wall_upload_server(url, access_token, group_id):
     method = 'photos.getWallUploadServer'
     full_url = f'{url}/{method}'
     params = {
-            'access_token': access_token,
-            'group_id': group_id,
-            'v': '5.131'
+        'access_token': access_token,
+        'group_id': group_id,
+        'v': '5.131'
     }
     response = requests.get(full_url, params=params)
     response.raise_for_status()
@@ -192,7 +192,8 @@ def main():
         level=logging.DEBUG,
         filename='log.lod',
         filemode='w',)
-    comics_folder = Path.cwd() / env.str('COMICS_TEMP_FOLDER', default='comics')
+    comics_folder = Path.cwd() / env.str(
+        'COMICS_TEMP_FOLDER', default='comics')
     Path(comics_folder).mkdir(parents=True, exist_ok=True)
     vk_api_uri = 'https://api.vk.com/method'
     access_token = env.str('VK_TOKEN')
