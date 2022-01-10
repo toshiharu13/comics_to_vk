@@ -227,7 +227,7 @@ def main():
             vk_api_uri, access_token, group_id, comics_message,
             comics_owner_id, comics_upload_id)
         logging.info(f'response_create_post {response_create_post}')
-    except Exception as error:
+    except requests.exceptions.ConnectionError as error:
         logging.info(f'Programm failed: {error}.')
     finally:
         shutil.rmtree(comics_folder, ignore_errors=True)
