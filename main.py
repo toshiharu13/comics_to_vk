@@ -213,20 +213,20 @@ def main():
     try:
         comics_number = get_random_comics_number()
         comics_message, comics_image = get_comics(comics_number, comics_folder)
-        uri_upload_server = get_wall_upload_server(
+        uploading_server_uri = get_wall_upload_server(
             vk_api_uri, access_token, group_id)
-        logging.info(f'uri_upload_server {uri_upload_server}')
+        logging.info(f'uploading_server_uri {uploading_server_uri}')
 
         upload_server_number, uploaded_comics, upload_hash = upload_comics(
-            uri_upload_server, comics_image)
+            uploading_server_uri, comics_image)
         comics_owner_id, comics_upload_id = save_wall_photo(
             vk_api_uri,  access_token, group_id,
             upload_server_number, uploaded_comics, upload_hash)
 
-        response_create_post = create_wall_post(
+        post_creation_response = create_wall_post(
             vk_api_uri, access_token, group_id, comics_message,
             comics_owner_id, comics_upload_id)
-        logging.info(f'response_create_post {response_create_post}')
+        logging.info(f'post_creation_response {post_creation_response}')
     except requests.exceptions.ConnectionError as error:
         logging.error(f'Programm failed: {error}.')
     finally:
