@@ -199,21 +199,21 @@ def main():
     group_id = env.str('VK_GROUP_ID')
     try:
         comics_number = get_random_comics_number()
-        comics_message_and_image = get_comics(comics_number, comics_folder)
+        comics_message, comics_image = get_comics(comics_number, comics_folder)
         uri_upload_server = get_wall_upload_server(
             vk_api_uri, access_token, group_id)
-        logging.info(uri_upload_server)
+        logging.info(f'uri_upload_server {uri_upload_server}')
 
         upload_response = upload_comics(
-            uri_upload_server, comics_message_and_image[1])
+            uri_upload_server, comics_image)
         response_save_wall = save_wall_photo(
             vk_api_uri,  access_token, group_id, upload_response)
-        logging.info(response_save_wall)
+        logging.info(f'response_save_wall {response_save_wall}')
 
         response_create_post = create_wall_post(
-            vk_api_uri, access_token, group_id, comics_message_and_image[0],
+            vk_api_uri, access_token, group_id, comics_message,
             response_save_wall)
-        logging.info(response_create_post)
+        logging.info(f'response_create_post {response_create_post}')
     except Exception as error:
         logging.info(f'Programm failed: {error}.')
     finally:
