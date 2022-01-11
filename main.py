@@ -36,7 +36,7 @@ def get_comics(comics_number, comics_folder):
 
 def get_random_comics_number():
     """
-    Функция получения ссылки на рандомный файл комикса
+    Функция получения случайного номера комикса.
     :return: случайный номер комикса
     """
     url = 'https://xkcd.com/info.0.json'
