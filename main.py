@@ -46,7 +46,7 @@ def get_random_comics_number():
     logging.info(decoded_response)
 
     last_comics_number = decoded_response['num']
-    random_comics_number = random.randint(0, last_comics_number)
+    random_comics_number = random.randint(1, last_comics_number)
     return random_comics_number
 
 
@@ -72,8 +72,7 @@ def get_filename_from_url(url):
     parsed_url = urlparse(url)
     path_to_file = parsed_url.path
     file_name = os.path.split(path_to_file)[1]
-    unquote(file_name, encoding='utf-8', errors='replace')
-    return file_name
+    return unquote(file_name, encoding='utf-8', errors='replace')
 
 
 def get_wall_upload_server(url, access_token, group_id):
