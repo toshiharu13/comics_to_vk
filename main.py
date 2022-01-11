@@ -20,11 +20,11 @@ def get_comics(comics_number, comics_folder):
     url = f'https://xkcd.com/{comics_number}/info.0.json'
     response = requests.get(url)
     response.raise_for_status()
-    decode_response = response.json()
-    logging.info(decode_response)
+    decoded_response = response.json()
+    logging.info(decoded_response)
 
-    comics_url = decode_response['img']
-    commics_comment = decode_response['alt']
+    comics_url = decoded_response['img']
+    commics_comment = decoded_response['alt']
     file_name = get_filename_from_url(comics_url)
 
     comics_file_destination = comics_folder / file_name
@@ -42,10 +42,10 @@ def get_random_comics_number():
     url = 'https://xkcd.com/info.0.json'
     response = requests.get(url)
     response.raise_for_status()
-    decode_response = response.json()
-    logging.info(decode_response)
+    decoded_response = response.json()
+    logging.info(decoded_response)
 
-    last_comics_number = decode_response['num']
+    last_comics_number = decoded_response['num']
     random_comics_number = random.randint(0, last_comics_number)
     return random_comics_number
 
@@ -93,9 +93,9 @@ def get_wall_upload_server(url, access_token, group_id):
     }
     response = requests.get(full_url, params=params)
     response.raise_for_status()
-    decode_response = response.json()
-    check_for_error(decode_response)
-    return decode_response['response']['upload_url']
+    decoded_response = response.json()
+    check_for_error(decoded_response)
+    return decoded_response['response']['upload_url']
 
 
 def upload_comics(url, image):
@@ -110,14 +110,14 @@ def upload_comics(url, image):
             'photo': file}
         response = requests.post(url, files=files)
     response.raise_for_status()
-    decode_response = response.json()
-    check_for_error(decode_response)
+    decoded_response = response.json()
+    check_for_error(decoded_response)
     logging.info(f'данные для дальней обработки изображения(комикса),'
-                 f' после загрузки изображения на сервер {decode_response}')
+                 f' после загрузки изображения на сервер {decoded_response}')
     return (
-        decode_response['server'],
-        decode_response['photo'],
-        decode_response['hash'])
+        decoded_response['server'],
+        decoded_response['photo'],
+        decoded_response['hash'])
 
 
 def save_wall_photo(
@@ -146,12 +146,12 @@ def save_wall_photo(
     full_url = f'{url}/{method}'
     response = requests.post(full_url, params=params)
     response.raise_for_status()
-    decode_response = response.json()
-    check_for_error(decode_response)
+    decoded_response = response.json()
+    check_for_error(decoded_response)
     logging.info(f' данные загрузки в альбом, '
-                 f'необходимы для дальнейшего поста {decode_response}')
-    return (decode_response['response'][0]['owner_id'],
-            decode_response['response'][0]['id'])
+                 f'необходимы для дальнейшего поста {decoded_response}')
+    return (decoded_response['response'][0]['owner_id'],
+            decoded_response['response'][0]['id'])
 
 
 def create_wall_post(
@@ -181,9 +181,9 @@ def create_wall_post(
 
     response = requests.get(full_url, params=params)
     response.raise_for_status()
-    decode_response = response.json()
-    check_for_error(decode_response)
-    return decode_response
+    decoded_response = response.json()
+    check_for_error(decoded_response)
+    return decoded_response
 
 
 def check_for_error(response):
