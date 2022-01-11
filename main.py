@@ -155,7 +155,7 @@ def save_wall_photo(
 
 def create_wall_post(
         url, access_token, group_id, comics_message,
-        comics_owner_id, comics_upload_id):
+        comics_owner_id, uploaded_comics_id):
     """
     Функция поста сообщения с изображением на стену
     :param url: адрес API VK
@@ -163,7 +163,7 @@ def create_wall_post(
     :param group_id: VK ID группы
     :param comics_message: сообщение будущего поста
     :param comics_owner_id: id учетной записи, загрузившей комикс(изображение)
-    :param comics_upload_id: id сохраненного комикса(изображения)
+    :param uploaded_comics_id: id сохраненного комикса(изображения)
     :return: номер поста в группе
     """
     params = {
@@ -175,7 +175,7 @@ def create_wall_post(
         'owner_id': f'-{group_id}'
     }
     full_url = f'{url}/wall.post'
-    attach_variable = f'photo{comics_owner_id}_{comics_upload_id}'
+    attach_variable = f'photo{comics_owner_id}_{uploaded_comics_id}'
     params['attachments'] = attach_variable
 
     response = requests.get(full_url, params=params)
@@ -218,13 +218,13 @@ def main():
 
         upload_server_number, uploaded_comics, upload_hash = upload_comics(
             uploading_server_uri, comics_image)
-        comics_owner_id, comics_upload_id = save_wall_photo(
+        comics_owner_id, uploaded_comics_id = save_wall_photo(
             vk_api_uri,  access_token, group_id,
             upload_server_number, uploaded_comics, upload_hash)
 
         post_creation_response = create_wall_post(
             vk_api_uri, access_token, group_id, comics_message,
-            comics_owner_id, comics_upload_id)
+            comics_owner_id, uploaded_comics_id)
         logging.info(f'post_creation_response {post_creation_response}')
     except requests.exceptions.ConnectionError as error:
         logging.error(f'Programm failed: {error}.')
